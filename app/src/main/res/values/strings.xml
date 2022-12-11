@@ -1,0 +1,11 @@
+<resources>
+    <string name="app_name">RestaurantOrders</string>
+
+    <string name="add">Add order</string>
+    <string name="order_added">Order was added successfully</string>
+
+    <string name="order_details">Order Details</string>
+    <string name="loading">Loading…</string>
+    <string name="deleted">Order was deleted</string>
+
+</resources>
