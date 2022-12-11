@@ -11,6 +11,8 @@ import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.semantics.contentDescription
+import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.unit.dp
 import com.aminovic.restaurantorders.data.modal.Order
 import com.aminovic.restaurantorders.ui.theme.LocalSpacing
@@ -18,7 +20,6 @@ import com.aminovic.restaurantorders.ui.theme.LocalSpacing
 
 @Composable
 fun OrderItem(
-    modifier: Modifier = Modifier,
     clickItem: () -> Unit,
     changeStatus: () -> Unit,
     order: Order
@@ -36,7 +37,12 @@ fun OrderItem(
             .padding(all = spacing.spaceMedium),
         horizontalArrangement = Arrangement.SpaceBetween
     ) {
-        order.name?.let { Text(text = it) }
+        order.name?.let {
+            Text(
+                modifier = Modifier.semantics { contentDescription = "orderItem"},
+                text = it
+            )
+        }
         Text(
             modifier = Modifier
                 .clickable { changeStatus() }

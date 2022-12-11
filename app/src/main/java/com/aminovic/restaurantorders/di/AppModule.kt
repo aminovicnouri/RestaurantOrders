@@ -38,36 +38,14 @@ class AppModule {
 
     @Provides
     @Singleton
-    fun providesAddOrderUseCase(repository: OrderRepository): AddOrderUseCase {
-        return AddOrderUseCase(repository)
+    fun providesOrderUseCase(repository: OrderRepository): OrderUseCases {
+        val removeOrderUseCase = RemoveOrderUseCase(repository)
+        return OrderUseCases(
+            addOrderUseCase = AddOrderUseCase(repository),
+            changeOrderStatusUseCase = ChangeOrderStatusUseCase(repository,removeOrderUseCase),
+            getOrdersUseCase = GetOrdersUseCase(repository),
+            getOrderUseCase = GetOrderUseCase(repository),
+            removeOrderUseCase = removeOrderUseCase
+        )
     }
-
-    @Provides
-    @Singleton
-    fun providesGetOrdersUseCase(repository: OrderRepository): GetOrdersUseCase {
-        return GetOrdersUseCase(repository)
-    }
-
-    @Provides
-    @Singleton
-    fun providesRemoveOrderUseCase(repository: OrderRepository): RemoveOrderUseCase {
-        return RemoveOrderUseCase(repository)
-    }
-
-    @Provides
-    @Singleton
-    fun providesGetOrderUseCaseUseCase(repository: OrderRepository): GetOrderUseCase {
-        return GetOrderUseCase(repository)
-    }
-
-    @Provides
-    @Singleton
-    fun providesChangeOrderStatusUseCase(
-        repository: OrderRepository,
-        removeOrderUseCase: RemoveOrderUseCase
-    ): ChangeOrderStatusUseCase {
-        return ChangeOrderStatusUseCase(repository, removeOrderUseCase)
-    }
-
-
 }

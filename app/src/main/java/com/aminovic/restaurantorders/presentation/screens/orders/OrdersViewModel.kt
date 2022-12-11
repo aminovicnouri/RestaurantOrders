@@ -6,9 +6,7 @@ import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.aminovic.restaurantorders.R
-import com.aminovic.restaurantorders.domain.use_case.AddOrderUseCase
-import com.aminovic.restaurantorders.domain.use_case.ChangeOrderStatusUseCase
-import com.aminovic.restaurantorders.domain.use_case.GetOrdersUseCase
+import com.aminovic.restaurantorders.domain.use_case.OrderUseCases
 import com.aminovic.restaurantorders.util.UiEvent
 import com.aminovic.restaurantorders.util.UiText
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -27,9 +25,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class OrdersViewModel @Inject constructor(
-    private val addOrderUseCase: AddOrderUseCase,
-    private val getOrdersUseCase: GetOrdersUseCase,
-    private val changeOrderStatusUseCase: ChangeOrderStatusUseCase,
+    private val orderUseCases: OrderUseCases
 ) : ViewModel() {
 
     var state by mutableStateOf(OrdersState())
@@ -48,7 +44,7 @@ class OrdersViewModel @Inject constructor(
         when (event) {
             is OrdersEvent.AddOrder -> {
                 viewModelScope.launch {
-                    addOrderUseCase()
+                    orderUseCases.addOrderUseCase()
                     _uiEvent.send(
                         UiEvent.ShowSnackbar(message = UiText.StringResource(resId = R.string.order_added))
                     )
@@ -59,16 +55,15 @@ class OrdersViewModel @Inject constructor(
             }
             is OrdersEvent.ChangeStatus -> {
                 viewModelScope.launch() {
-                    changeOrderStatusUseCase(event.order)
+                    orderUseCases.changeOrderStatusUseCase(event.order)
                 }
             }
-            else -> Unit
         }
     }
 
     private fun getOrders() {
         getOrdersJob?.cancel()
-        getOrdersJob = getOrdersUseCase()
+        getOrdersJob = orderUseCases.getOrdersUseCase()
             .onEach { list ->
                 state = state.copy(
                     ordersList = list

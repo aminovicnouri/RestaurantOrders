@@ -22,7 +22,7 @@ class ChangeOrderStatusUseCase(
                 status = newStatus
             )
             if (newStatus == OrderStatus.Delivered.value) {
-                delay(5000)
+                delay(15000)
                 removeOrderUseCase(order)
             }
         }

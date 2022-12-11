@@ -5,7 +5,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.aminovic.restaurantorders.domain.use_case.GetOrderUseCase
+import com.aminovic.restaurantorders.domain.use_case.OrderUseCases
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
@@ -18,7 +18,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class DetailsViewModel @Inject constructor(
-    private val getOrderUseCase: GetOrderUseCase
+    private val orderUseCases: OrderUseCases
 ) : ViewModel() {
 
     var state by mutableStateOf(DetailsState())
@@ -26,7 +26,7 @@ class DetailsViewModel @Inject constructor(
 
     fun getOrder(id: Int) {
         viewModelScope.launch {
-            getOrderUseCase(id).let { order ->
+            orderUseCases.getOrderUseCase(id).let { order ->
                 delay(500)
                 state = state.copy(
                     order = order,
